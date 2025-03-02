@@ -5,7 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
-<body>
-    <h1>Hello from UI!</h1>
+<body style="
+    display: flex;
+    flex-wrap: wrap;
+">
+    <iframe id="docstate-viewer" src="http://localhost:3000/docstate-viewer" width="300px" height="300px"></iframe>
+    <iframe id="timeline" src="http://localhost:3000/timeline" width="300px" height="300px"></iframe>
+    <iframe id="viewport" src="http://localhost:3000/viewport" width="300px" height="300px"></iframe>
+    <iframe id="text-viewport" src="http://localhost:3000/text-viewport" width="300px" height="300px"></iframe>
+
+
 </body>
+<script src="./client.js"></script>
 </html>

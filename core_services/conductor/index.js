@@ -18,15 +18,28 @@ wss.on('connection', (ws) => {
         console.log('[Conductor] UI client disconnected');
         clients.delete(ws);
     });
+
+    // forward messages
+    ws.on('message', async (message) => {
+        message = JSON.parse(message);
+        console.log('[Conductor] Received message from UI client:', message);
+
+        if (!message.target) return;
+        try {
+            await forwardMessage(message);
+        } catch (err) {
+            console.error('[Conductor] Error parsing message:', err);
+        }
+    });
 });
 
 // Function to forward messages
 async function forwardMessage(message) {
-    console.log(`[Conductor] Forwarding message:`, message);
+    console.log(`[Conductor] Forwarding message:`, JSON.stringify(message));
 
     // Forward to background_scripts via HTTP
     try {
-        await fetch('http://localhost:6000/background_scripts', {
+        await fetch('http://localhost:9000/background_scripts', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(message),
@@ -52,9 +65,12 @@ conductor.post('/message', async (req, res) => {
     res.json({ status: 'Message forwarded' });
 });
 
+
+
+
 // Start WebSocket Server
-server.listen(7000, () => {
-    console.log('[Conductor] WebSocket server running on ws://localhost:7000');
+server.listen(9001, () => {
+    console.log('[Conductor] WebSocket server running on ws://localhost:9001');
 });
 
 export { conductor };
